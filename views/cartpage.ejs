@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .cart-header h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 0;
+            position: relative;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+            padding-left: 20px;
+        }
+
+        .cart-item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cart-item-quantity {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        /* Delete Button with Icon */
+        .delete-button {
+            background-color: #f7a308;
+            color: white;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-button i {
+            margin: 0; /* No margin needed since it's the only content */
+        }
+
+        .delete-button:hover {
+            background-color: #ff0000;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .total-amount {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .buy-button {
+            background-color: #4CAF50;
+            display: block;
+            width: 100%;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .go-back-button {
+            display: block;
+            width: 100%;
+            background-color: #FF5722;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+
+        .go-back-button:hover {
+            background-color: #e64a19;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item-details {
+                padding-left: 0;
+                margin-top: 10px;
+            }
+
+            .total-amount {
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .buy-button,
+            .go-back-button {
+                width: auto;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>Your Cart</h1>
+        </div>
+        <% user.forEach((del) => { %>
+            <div class="cart-items">
+                <!-- Cart Item -->
+                <div class="cart-item">
+                    <img src="./images/<%= del.pic %>" alt="Product Image">
+                    <div class="cart-item-details">
+                        <p class="cart-item-name"><%= del.item %></p>
+                        <p class="cart-item-quantity"><%= del.quantity %>KG</p>
+                        <p class="cart-item-price">Rs.<%= del.price %></p>
+                    </div>
+                    <!-- Delete Button with Icon -->
+                    <button class="delete-button" onclick="window.location.href='/deleteItem/<%= del._id %>';">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        <% }) %>
+
+        <!-- Total Amount Section -->
+        <div class="total-amount">
+            <p id="para"></p>
+        </div>
+
+        <!-- Buy Button -->
+        <button class="buy-button" onclick="window.location.href='/checkout';">Proceed to Checkout</button>
+
+        <!-- Go Back Button -->
+        <button class="go-back-button" onclick="window.history.back();">Go Back</button>
+
+        <!-- Message if Cart is Empty -->
+        <div class="empty-cart-message">
+            <!-- This is where you can display a message if the cart is empty -->
+        </div>
+    </div>
+
+    <div id="userdata" data-user='<%= JSON.stringify(user) %>'></div>
+
+    <script>
+        let user = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+        let p = 0;
+        user.forEach(u => {
+            p += u.price;
+        });
+        document.getElementById('para').textContent = `Total: Rs. ${p}`;
+
+        // Function to delete an item from the cart
+        function deleteItem(itemId) {
+            // Send a request to the server to delete the item from the cart
+            fetch(`/deleteItem/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Item deleted successfully!');
+                    window.location.reload(); // Refresh the page to reflect changes
+                } else {
+                    alert('Failed to delete the item.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the item.');
+            });
+        }
+    </script>
+</body>
+</html>

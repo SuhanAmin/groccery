@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Form</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Form container styling */
+        .form-container {
+            width: 400px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Form input fields styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="file"],
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="file"]:focus,
+        .input-group input[type="number"]:focus {
+            border-color: #4CAF50;
+        }
+
+        /* Styling for image preview box */
+        .image-box {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 16px;
+            background-color: #f7f7f7;
+            margin-bottom: 15px;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        /* Submit Button Styling */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Product Form</h2>
+        <form action="/sub/<%=post1._id%>" method="POST" >
+            <!-- Image Upload -->
+            <div class="input-group">
+                <label for="image">Product Image</label>
+                <div class="image-box" id="image-box">
+                    <img src="/images/<%= post1.filename%>" alt="Product Image">
+                </div>
+            </div>
+
+            <!-- Product Name -->
+            <div class="input-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" value="<%=post1.title%>" name="title" placeholder="Enter product name" required>
+            </div>
+
+            <!-- Product Price -->
+            <div class="input-group">
+                <label for="price">Product Price (Rs.)</label>
+                <input type="number" id="price" value="<%=post1.price%>" name="price" placeholder="Enter product price" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Submit Product</button>
+        </form>
+    </div>
+
+   
+
+</body>
+</html>

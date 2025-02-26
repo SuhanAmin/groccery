@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Panel Styling */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Profile Button on the left */
+        .header .profile-btn, .header .order-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover, .header .order-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i, .header .order-btn i {
+            font-size: 18px;
+        }
+
+        /* Cart and Logout Buttons on the Right */
+        .header .other-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header button {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header button:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header button i {
+            font-size: 18px;
+        }
+
+        /* Main content styling */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 100px 20px 20px 20px; /* Padding to avoid overlap with header */
+            justify-items: center;
+            margin-top: 2%;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        .product-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        .buy-btn {
+            background-color: #FF5722;
+            color: white;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            background-color: #e64a19;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 120px;
+            width: 60px;
+            height: 60px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 30px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        .floating-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Profile Sliding Panel */
+        .button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .button-edit:hover {
+            background-color: #45a049;
+        }
+
+        .button-delete {
+            background-color: #FF5722;
+            color: white;
+        }
+
+        .button-delete:hover {
+            background-color: #e64a19;
+        }
+        .product-card-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .product-card-footer .button {
+            width: 48%;
+        }
+        .button i {
+            margin-right: 5px; /* Space between icon and text */
+        }
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column; /* Stack title and buttons vertically */
+                text-align: center;
+                padding: 20px; /* Adjust padding for smaller screens */
+            }
+
+            .header .buttons {
+                justify-content: center; /* Center the buttons */
+                margin-top: 10px;
+            }
+
+            .container {
+                padding: 120px 10px 20px 10px; /* Adjust padding to accommodate header */
+            }
+
+            .product-card {
+                max-width: 100%; /* Let the product cards take full width */
+            }
+
+            .product-img {
+                height: 150px; /* Adjust image height for smaller screens */
+            }
+
+            .header button {
+                font-size: 14px; /* Smaller buttons on mobile */
+                padding: 8px 16px;
+            }
+
+            /* Profile button should also be adjusted for mobile */
+            .header .profile-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Panel with E-Mart and Buttons -->
+    <div class="header">
+       
+            <!-- Profile Button to the left -->
+            <button class="profile-btn" onclick="window.location.href='/adminhome';">
+                <i class="fas fa-home"></i> Home
+            </button>
+   
+        <div class="title">E-Mart</div>
+        <!-- Cart and Logout Buttons to the right -->
+       
+    </div>
+
+    <!-- Profile Sliding Panel -->
+    
+    <!-- Main Content Area -->
+    <div class="container">
+        <% post1.forEach((product) => { %>
+            <div class="product-card">
+                <img src="./images/<%= product.filename %>" alt="Product" class="product-img">
+                <div class="product-details">
+                    <h3 class="product-name"><%= product.title %></h3>
+                    <p class="product-price">Rs.<%= product.price %></p>
+                </div>
+                <div class="product-card-footer">
+                    <!-- Edit Button -->
+                    <button class="button button-edit" onclick="window.location.href='/edit/<%= product._id %>';">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <!-- Delete Button -->
+                    <button class="button button-delete" onclick="window.location.href='/delete/<%= product._id %>';">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </div>
+        <% }) %>
+       
+    </div>
+
+    <script>
+      
+
+        // Add event listeners for the header buttons
+        document.querySelector('.cart-btn').addEventListener('click', () => {
+            window.location.href = '/cart';
+        });
+
+        document.querySelector('.order-btn').addEventListener('click', () => {
+            window.location.href = '/orders';
+        });
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            window.location.href = '/logout';
+        });
+
+     
+    </script>
+</body>
+</html>

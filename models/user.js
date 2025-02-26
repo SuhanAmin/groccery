@@ -1,0 +1,40 @@
+const mongoose=require('mongoose');
+require('dotenv').config();
+mongoose.connect(process.env.MONGO_URI);
+const userSchema=mongoose.Schema({
+    username:String,
+    email:String,
+    mobile:{
+        type:Number,
+        unique:true
+    },
+    password:String,
+    address:String,
+    state:String,
+    pincode:Number,
+    payment:String,
+    cart:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"delivery"
+        }
+    ],
+    orders:
+        [
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"delivery"
+        }
+    ]
+    ,
+    latitude:Number,
+    longitude:Number,
+    myorders:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"delivery"
+        }
+    ]
+    
+});
+module.exports=mongoose.model('user',userSchema);

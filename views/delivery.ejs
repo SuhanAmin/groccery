@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mart</title>
+    <style>  
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .profile-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i {
+            font-size: 18px;
+        }
+
+        /* Body Container */
+        .container {
+            margin-top: 100px; /* Offset the header */
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        .product-card-footer {
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+        }
+
+        .product-card-footer h3 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .product-card-footer .address {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .product-card-footer .address span {
+            color: #FF5722; /* Unique color for address, pincode, state */
+            font-weight: 700;
+        }
+
+        .product-card-footer button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .product-card-footer button:hover {
+            background-color: #FF5722;
+            transform: translateY(-5px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <div class="header">
+        <!-- Profile Button to the left -->
+        <button class="profile-btn" onclick="window.location.href='/logout';">
+            <i class="fas fa-home"></i> logout
+        </button>
+        <div class="title">E-Mart</div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- Loop through users -->
+        <% users.forEach((product) => { %>
+            <% if(product.orders.length > 0){ %>
+                <div class="product-card">
+                    <h1><%= product.username %></h1>
+                    
+                    <!-- Loop through orders of each user -->
+                    <% product.orders.forEach((p) => { %>
+                        <div class="product-details">
+                            <img src="./images/<%= p.pic %>" alt="Product" class="product-img">
+                            <h3 class="product-name"><%= p.item %></h3>
+                            <h3 class="product-name">Quantity: <%= p.quantity %></h3>
+                            <p class="product-price">Price: <%= p.price %></p>
+                        </div>
+                    <% }) %>
+
+                    <div class="product-card-footer">
+                        <div class="address">
+                            <span>Address:</span> <%= product.address %>, 
+                            <span>Pincode:</span> <%= product.pincode %>, 
+                            <span>State:</span> <%= product.state %>
+                        </div>
+                        <h3>Mobile: <%= product.mobile %></h3>
+                        <div class="a3">  
+                        </div>
+                        <h3>Payment: <%= product.payment %></h3>
+                        <button onclick="window.location.href='/usertrack/<%= product._id %>';">Track</button>
+                        <button onclick="window.location.href='/delivery/<%= product._id %>';">Delivered</button>
+                    </div>
+                </div>
+            <% } %>
+        <% }) %>
+    </div>
+    <div id="userdata" data-user='<%= JSON.stringify(users) %>'></div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+
+    <script>
+       
+       const userdata = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+       let index = 0;
+        userdata.forEach((element) => {
+            
+           
+            if(element.orders.length > 0){
+               
+                let total = 0;
+                element.orders.forEach((order) => {
+                    total += order.price;
+                });
+              
+                
+                const a3 = document.querySelectorAll('.a3')[index];
+                
+                const totalPara = document.createElement('h3');
+                totalPara.textContent = `Total: Rs. ${total}`;
+                a3.appendChild(totalPara);
+              index++;
+            }
+           
+            
+        });
+        const socket=io();
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+              
+                
+                socket.emit('sendd-location', { latitude, longitude, email: userdata.email });
+            },
+            (error) => {
+                console.error('Error getting location:', error);
+                switch (error.code) {
+                    case error.TIMEOUT:
+                        alert('The request to get your location timed out. Please ensure your GPS is enabled and try again.');
+                        break;
+                    case error.PERMISSION_DENIED:
+                        alert('You denied the request to access your location. Please enable location permissions in your browser settings.');
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert('Your location is unavailable. Please ensure your GPS is enabled and try again.');
+                        break;
+                    default:
+                        alert('An unknown error occurred while trying to get your location.');
+                        break;
+                }
+            },
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        );
+
+        
+       
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Panel Styling */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Profile Button on the left */
+        .header .profile-btn, .header .order-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover, .header .order-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i, .header .order-btn i {
+            font-size: 18px;
+        }
+
+        /* Cart and Logout Buttons on the Right */
+        .header .other-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header button {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header button:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header button i {
+            font-size: 18px;
+        }
+
+        /* Main content styling */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 100px 20px 20px 20px; /* Padding to avoid overlap with header */
+            justify-items: center;
+            margin-top: 2%;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        .product-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        .buy-btn {
+            background-color: #FF5722;
+            color: white;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            background-color: #e64a19;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 120px;
+            width: 60px;
+            height: 60px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 30px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        .floating-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Profile Sliding Panel */
+        .profile-panel {
+            position: fixed;
+            top: 0;
+            left: -35%; /* Initially hidden off the screen */
+            width: 30%;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: left 0.3s ease-in-out;
+            z-index: 1001;
+        }
+
+        .profile-panel .close-btn {
+            align-self: flex-end;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile-panel .close-btn:hover {
+            background-color: #e64a19;
+        }
+
+        .profile-panel h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .profile-panel form {
+            width: 100%;
+        }
+
+        .profile-panel label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .profile-panel input, .profile-panel select, .profile-panel textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .profile-panel textarea {
+            resize: none;
+        }
+
+        .profile-panel button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-panel button:hover {
+            background-color: #45a049;
+        }
+        .popup {
+      display: none;
+      position: fixed;
+      top: 70%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      color:#28a745;
+      
+    }
+    .fa-check-circle {
+      color: #28a745; /* Green color for the checkmark */
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column; /* Stack title and buttons vertically */
+                text-align: center;
+                padding: 20px; /* Adjust padding for smaller screens */
+            }
+
+            .header .buttons {
+                justify-content: center; /* Center the buttons */
+                margin-top: 10px;
+            }
+
+            .container {
+                padding: 120px 10px 20px 10px; /* Adjust padding to accommodate header */
+            }
+
+            .product-card {
+                max-width: 100%; /* Let the product cards take full width */
+            }
+
+            .product-img {
+                height: 150px; /* Adjust image height for smaller screens */
+            }
+
+            .header button {
+                font-size: 14px; /* Smaller buttons on mobile */
+                padding: 8px 16px;
+            }
+
+            /* Profile button should also be adjusted for mobile */
+            .header .profile-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            .profile-panel {
+               left:-40%;
+            }
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Panel with E-Mart and Buttons -->
+    <div class="header">
+        <div class="other-buttons">
+        <!-- Profile Button to the left -->
+        <button class="profile-btn">
+            <i class="fas fa-user"></i> Profile
+        </button>
+        <button class="order-btn">
+            <i class="fas fa-box"></i> Orders
+        </button>
+    </div>
+        <div class="title">E-Mart</div>
+        <!-- Cart and Logout Buttons to the right -->
+        <div class="other-buttons">
+            <button class="cart-btn">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </button>
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Sliding Panel -->
+    <div class="profile-panel" id="profile-panel">
+        <button class="close-btn" onclick="closeProfilePanel()">X</button>
+        <h2>Profile Information</h2>
+        <form action="/profile" method="post">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" value="<%= user.username %>" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="mobile" value="<%= user.mobile %>" placeholder="Enter your phone number" required>
+
+            <label for="state">State</label>
+            <select id="state" name="state" required>
+                <option value="<%=user.state%>"><%=user.state%></option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <!-- Add more states as necessary -->
+            </select>
+
+            <label for="address">Address</label>
+            <textarea id="address" name="address"   rows="4" placeholder="Enter your address" resize="none" required><%=user.address%></textarea>
+
+            <label for="pincode">Pincode</label>
+            <input type="number" id="pincode" value="<%=user.pincode%>" name="pincode" placeholder="Enter your pincode" required>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <% post1.forEach((product) => { %>
+        <div class="product-card">
+            <img src="./images/<%=product.filename%>" alt="Product 1" class="product-img">
+            <div class="product-details">
+                <h3 class="product-name"><%= product.title %></h3>
+                <p class="product-price">Rs.<%= product.price %></p>
+                <div class="product-card-footer">
+                </div>
+            </div>
+        </div>
+        <% }) %>
+        <button class="floating-button">
+            +
+        </button>
+        <div id="popup" class="popup">
+    
+            <p><i class="fas fa-check-circle"></i> Logged Out Successfully</p>
+         
+        </div>
+    </div>
+    
+    <div id="userdata" data-user='<%= JSON.stringify(user) %>'></div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+
+    <script>
+          
+          const userdata = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+        
+        const floatingButton = document.querySelector('.floating-button');
+        floatingButton.addEventListener('click', () => {
+            window.location.href = '/selectitem';
+        });
+
+        // Add event listeners for the header buttons
+        document.querySelector('.cart-btn').addEventListener('click', () => {
+            window.location.href = '/cart';
+        });
+
+        document.querySelector('.order-btn').addEventListener('click', () => {
+            window.location.href = '/orders';
+        });
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            const popup= document.querySelector('.popup');
+       
+
+          
+    popup.style.display = 'flex'; // Show the popup
+      setTimeout(() => {
+        popup.style.display = 'none'; // Hide the popup after 1 second
+      }, 1000);
+     
+ 
+            window.location.href = '/logout';
+        });
+
+        // Open the Profile panel
+        document.querySelector('.profile-btn').addEventListener('click', () => {
+            document.getElementById('profile-panel').style.left = '0'; // Slide in panel
+        });
+
+        // Close the Profile panel
+        function closeProfilePanel() {
+            document.getElementById('profile-panel').style.left = '-40%'; // Slide panel offscreen
+        }
+        const socket=io();
+        function smthing(){
+            
+        }
+        if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            socket.emit('send-location', { latitude, longitude, email: userdata.email });
+        },
+        (error) => {
+            console.error('Error getting location:', error);
+            switch (error.code) {
+                case error.TIMEOUT:
+                    alert('The request to get your location timed out. Please ensure your GPS is enabled and try again.');
+                    break;
+                case error.PERMISSION_DENIED:
+                    alert('You denied the request to access your location. Please enable location permissions in your browser settings.');
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert('Your location is unavailable. Please ensure your GPS is enabled and try again.');
+                    break;
+                default:
+                    alert('An unknown error occurred while trying to get your location.');
+            }
+        },
+        {
+            enableHighAccuracy: false, // Disable high accuracy for faster results
+            timeout: 10000, // Increase timeout to 10 seconds
+            maximumAge: 60000 // Allow cached location (1 minute old)
+        }
+    );
+} else {
+    alert('Geolocation is not supported by this browser.');
+}
+    
+       
+
+      
+      
+       
+
+
+    </script>
+</body>
+</html>

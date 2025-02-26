@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Information</title>
+    <style>
+        /* Overall Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profile-panel {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+            color: #4CAF50;
+        }
+
+        input[type="text"], input[type="tel"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        /* Radio Button Styling */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .payment-options label {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            color: #555;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        .popup {
+      display: none;
+      position: fixed;
+      top: 70%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      color:#28a745;
+      
+    }
+    .fa-check-circle {
+      color: #28a745; /* Green color for the checkmark */
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Disabled state for UPI */
+        input[type="radio"]:disabled + label {
+            color: #bbb;
+        }
+        .buy-button{
+            background-color: #4CAF50;
+            display: block;
+            width: 100%;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+        .go-back-button {
+            display: block;
+            width: 100%;
+            background-color: #FF5722;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .go-back-button:hover {
+            background-color: #e64a19;
+        }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .profile-panel {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="profile-panel" id="profile-panel">
+        <h2>Profile Information</h2>
+        <form action="/payment" method="post" id="form1">
+            <label for="username">Username</label>
+            <input type="text" id="username" value="<%= user.username %>" name="username" placeholder="Enter your username" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="mobile" value="<%= user.mobile %>" placeholder="Enter your phone number" required>
+
+            <label for="state">State</label>
+            <select id="state" name="state" required>
+                <option value="<%=user.state%>"><%=user.state%></option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <!-- Add more states as necessary -->
+            </select>
+
+            <label for="address">Address</label>
+            <textarea id="address" name="address" rows="4"  placeholder="Enter your address" required><%=user.address%></textarea>
+
+            <label for="pincode">Pincode</label>
+            <input type="number" id="pincode" value="<%=user.pincode%>" name="pincode" placeholder="Enter your pincode" required>
+
+            <!-- Payment Method Options -->
+            <div class="payment-options">
+                <label style="color: #4CAF50;margin-top: 5px;">Payment Method</label>
+                <div>
+                    <input type="radio" id="cash-on-delivery" name="payment" value="Cash on Delivery" required>
+                    <label for="cash-on-delivery">Cash on Delivery</label>
+                </div>
+                <div>
+                    <input type="radio" id="upi" name="payment" value="UPI" disabled>
+                    <label for="upi">UPI (Currently Unavailable)</label>
+                </div>
+                <h3 id="para"></h3>
+            </div>
+
+            <button class="buy-button"></button>
+            <button class="go-back-button" onclick="window.history.back();">Go Back</button>
+        </form>
+        <div id="popup" class="popup">
+    
+            <p><i class="fas fa-check-circle"></i> Order Placed!</p>
+         
+        </div>
+    </div>
+    
+    <div id="userdata" data-user='<%= JSON.stringify(user) %>'></div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+
+    <script>
+         const socket=io();
+        const userdata = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+        let p=0
+       userdata.cart.forEach(u => {
+            p += u.price;
+       })
+        
+        document.querySelector('.buy-button').textContent = `Proceed Order - Rs. ${p}`;
+     const popup= document.querySelector('.popup');
+       
+        document.getElementById('form1').addEventListener('submit', () => {
+          
+    popup.style.display = 'flex'; // Show the popup
+      setTimeout(() => {
+        popup.style.display = 'none'; // Hide the popup after 1 second
+      }, 1000);
+     
+  })
+
+  
+       
+
+      
+   
+   
+    </script>
+</body>
+</html>

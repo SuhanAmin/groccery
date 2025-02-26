@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Map</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        .leaflet-control-zoom, .leaflet-bar, .leaflet-control {
+    display: none;
+}
+
+        
+        /* Header Panel Styling */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Profile Button on the left */
+        .header .profile-btn, .header .order-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover, .header .order-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i, .header .order-btn i {
+            font-size: 18px;
+        }
+
+        /* Cart and Logout Buttons on the Right */
+        .header .other-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header button {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header button:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header button i {
+            font-size: 18px;
+        }
+
+        /* Hide any routing instructions or description */
+        .leaflet-routing-container,
+        .leaflet-routing-instructions {
+            display: none;
+        }
+    </style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+</head>
+<body>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <div class="header">
+        <div class="other-buttons">
+        <!-- Profile Button to the left -->
+        <button class="order-btn">
+            <i class="fas fa-home"></i> Home
+        </button>
+    </div>
+        <div class="title">E-Mart</div>
+        <!-- Cart and Logout Buttons to the right -->
+        <div class="other-buttons">
+            
+            <button class="logout-btn" >
+                <i class="fas fa-sync"></i>
+                Refresh
+            </button>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="userdata" data-user='<%= JSON.stringify(lastLocation) %>'></div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+
+    <script>
+        const user = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+        document.querySelector('.order-btn').addEventListener('click', function() {
+            window.history.back();
+        });
+
+        // Refresh button functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            window.location.reload();
+        });
+        const socket = io();
+
+        const bikeIcon = L.icon({
+            iconUrl: '/images/3448289.png',  // Local path to the downloaded icon
+            iconSize: [45, 45],  // Adjust the size
+            iconAnchor: [16, 32], // Anchor the icon at the bottom center
+            popupAnchor: [0, -32], // Position of the popup
+        });
+
+        let map;  // Declare map globally
+        let userMarker;  // Declare user marker globally
+        let routeControl;  // Declare routeControl globally to manage the route
+        const markers = [];
+
+        // Initialize map only once
+        function initializeMap(lat, long) {
+            map = L.map('map').setView([lat, long], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Suhan'
+            }).addTo(map);
+        }
+
+        // Watch the user's location and emit it to the server
+        navigator.geolocation.watchPosition((position) => {
+            const lat = position.coords.latitude;
+            const long = position.coords.longitude;
+
+            const fixedLocation = { latitude: lat, longitude: long };
+
+            // Initialize map only once
+            if (!map) {
+                initializeMap(lat, long);  // Initialize the map when first getting the position
+            }
+
+            // If userMarker doesn't exist, create it
+            if (!userMarker) {
+                userMarker = L.marker([fixedLocation.latitude, fixedLocation.longitude], { icon: bikeIcon }).addTo(map);
+            } else {
+                // Update the user's position marker without creating new popups
+                userMarker.setLatLng([fixedLocation.latitude, fixedLocation.longitude]);
+            }
+
+            socket.emit('sendd-location', fixedLocation);
+
+            // After the user's position is updated, create or update the route
+            if (user && user.latitude && user.longitude) {
+                L.marker([user.latitude, user.longitude]).addTo(map);
+                createOrUpdateRoute(user.latitude, user.longitude, fixedLocation.latitude, fixedLocation.longitude);
+            }
+
+        }, (error) => {
+            console.error(error);
+        }, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        });
+
+        // Create or update the route between two points (No directions shown)
+        function createOrUpdateRoute(userLat, userLng, fixedLat, fixedLng) {
+            if (L.Routing) {
+                // If a route exists, remove it
+                if (routeControl) {
+                    map.removeControl(routeControl);
+                }
+
+                // Create a new route without the instructions (No directions, no control display)
+                routeControl = L.Routing.control({
+                    waypoints: [
+                        L.latLng(fixedLat, fixedLng),
+                        L.latLng(userLat, userLng)
+                    ],
+                    routeWhileDragging: true,
+                    lineOptions: {
+                        styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
+                    },
+                    createMarker: function() { return null; },  // Disable route markers
+                   // instructions: false  // Disables the direction steps (no description popup)
+                }).addTo(map);
+
+                routeControl.on('routesfound', function (e) {
+                    console.log("Route found:", e.routes);
+                });
+
+                routeControl.on('routingerror', function (e) {
+                    console.error("Routing error:", e.error);
+                });
+            } else {
+                console.error("Leaflet Routing Machine is not available!");
+            }
+        }
+
+        // Handle the received location from the server (initial location)
+        socket.on('receive-location', (data) => {
+            map.setView([data.latitude, data.longitude], 13); // Move map to user’s location
+            if (markers[0]) {
+                markers[0].setLatLng([data.latitude, data.longitude]);
+            } else {
+                markers[0] = L.marker([data.latitude, data.longitude]).addTo(map);
+            }
+
+            // Update route after receiving the location from the server
+            if (user && user.latitude && user.longitude) {
+                createOrUpdateRoute(user.latitude, user.longitude, data.latitude, data.longitude);
+            }
+        });
+
+        // Fetch the last location from the server (e.g., MongoDB)
+        const lastLocation = user; // Last stored location from MongoDB
+        if (lastLocation) {
+            if (markers[1]) {
+                markers[1].setLatLng([lastLocation.latitude, lastLocation.longitude]);
+            } else {
+                markers[1] = L.marker([lastLocation.latitude, lastLocation.longitude]).addTo(map);
+            }
+
+            // After the last location is available, create the route
+            if (user && user.latitude && user.longitude) {
+                createOrUpdateRoute(user.latitude, user.longitude, lastLocation.latitude, lastLocation.longitude);
+            }
+        }
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image and Price Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        input[type="file"], input[type="number"] , input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            background-color: #f9f9f9;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .header .profile-btn, .header .order-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover, .header .order-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i, .header .order-btn i {
+            font-size: 18px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+       
+        <!-- Profile Button to the left -->
+        <button class="profile-btn" onclick="window.location.href='/adminhome';">
+            <i class="fas fa-home"></i> Home
+        </button>
+
+    <div class="title">E-Mart</div>
+    <!-- Cart and Logout Buttons to the right -->
+   
+</div>
+    <div class="form-container">
+        <h1>Upload details</h1>
+
+        <form action="/submit" method="POST" enctype="multipart/form-data">
+            <input type="text" id="title" name="title" placeholder="name" required>
+            <input type="file" id="image" name="filename" placeholder="Upload Image" required>
+
+            <input type="number" id="price" name="price" placeholder="price" required>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

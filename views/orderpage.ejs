@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .cart-header h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 0;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+            padding-left: 20px;
+        }
+
+        .cart-item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cart-item-quantity {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .total-amount {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .buy-button{
+            background-color: #4CAF50;
+            display: block;
+            width: 100%;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .go-back-button {
+            display: block;
+            width: 100%;
+            background-color: #FF5722;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .buy-button:hover{
+            background-color: #45a049;
+        }
+        .go-back-button:hover {
+            background-color: #e64a19;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item-details {
+                padding-left: 0;
+                margin-top: 10px;
+            }
+
+            .total-amount {
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .buy-button,
+            .go-back-button {
+                width: auto;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>My Orders</h1>
+        </div>
+      <% if(user.orders.length==0){%>
+        <div class="cart-items">
+            <div class="cart-item">
+               <h1>No Current Orders</h1>
+            </div>
+        </div>
+     <% }else{%>
+        <% user.orders.forEach((del)=>{%>
+            <div class="cart-items">
+                <!-- Example Cart Item -->
+                <div class="cart-item">
+                    <img src="./images/<%=del.pic%>" alt="Product Image">
+                    <div class="cart-item-details">
+                        <p class="cart-item-name"><%=del.item%></p>
+                        <p class="cart-item-quantity"><%=del.quantity%>KG</p>
+                        <p class="cart-item-price">Rs.<%=del.price%></p>
+                    </div>
+                </div>
+            </div>
+        <%})%>
+       <!-- Total Amount Section -->
+        <div class="total-amount">
+            <p id="para"></p>
+        </div>
+
+        <!-- Buy Button -->
+        <button class="buy-button" onclick="window.location.href='/deliverytrack/<%=user._id%>';">Track order</button>
+    <%}%>
+        <!-- Go Back Button -->
+      
+      
+            <% user1.forEach((del)=>{%>
+                <div class="cart-items">
+                    <!-- Example Cart Item -->
+                    <div class="cart-item">
+                        <img src="./images/<%=del.pic%>" alt="Product Image">
+                        <div class="cart-item-details">
+                            <p class="cart-item-name"><%=del.item%></p>
+                            <p class="cart-item-quantity"><%=del.quantity%>KG</p>
+                            <p class="cart-item-price">Rs.<%=del.price%></p>
+                        </div>
+                        <h2>Delivered</h2>
+                    </div>
+                </div>
+            <%})%>
+           <!-- Total Amount Section -->
+            
+    
+            <!-- Buy Button -->
+           
+            
+            <!-- Go Back Button -->
+            <button class="go-back-button" onclick="window.history.back();">Go Back</button>
+       
+
+        <!-- Message if Cart is Empty -->
+        <div class="empty-cart-message">
+            <!-- This is where you can display a message if the cart is empty
+            <p>Your cart is empty.</p> -->
+        </div>
+    </div>
+    <div id="userdata" data-user='<%= JSON.stringify(user) %>'></div>
+    <div id="userdata1" data-user='<%= JSON.stringify(user1) %>'></div>
+    <script>
+        let user = JSON.parse(document.getElementById('userdata').getAttribute('data-user'));
+        let user1 = JSON.parse(document.getElementById('userdata1').getAttribute('data-user'));
+        let p=0;
+       
+            user.forEach(u=> {
+            p+=u.price
+        });  
+       
+       
+       
+        document.getElementById('para').textContent=`Total: Rs. ${p}`;
+    </script>
+</body>
+</html>

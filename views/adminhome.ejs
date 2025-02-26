@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Buttons</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .header .profile-btn, .header .order-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-btn:hover, .header .order-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+
+        .header .profile-btn i, .header .order-btn i {
+            font-size: 18px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px; /* Height of the header */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header .title {
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Container for the buttons */
+        .button-container {
+            display: flex;
+            gap: 20px;  /* Adds space between buttons */
+        }
+
+        /* Button styling */
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+            color: white;
+        }
+
+        /* Button 1 (Green) */
+        .button-green {
+            background-color: #4CAF50;
+        }
+
+        .button-green:hover {
+            background-color: #45a049;
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+
+        /* Button 2 (Blue) */
+        .button-blue {
+            background-color: #2196F3;
+        }
+
+        .button-blue:hover {
+            background-color: #0b7dda;
+            transform: scale(1.05);
+        }
+
+        /* Button 3 (Red) */
+        .button-red {
+            background-color: #FF5722;
+        }
+
+        .button-red:hover {
+            background-color: #e64a19;
+            transform: scale(1.05);
+        }
+
+        /* Optional: Style for a heading */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .logout-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px; /* Rounded button */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #FF5722;
+            color: white;
+            border-color: #FF5722;
+            transform: translateY(-5px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+    <!-- Heading -->
+    <div class="title">E-Mart</div>
+
+<button class="logout-btn" onclick="window.location.href='/logout';">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</button>
+</div>
+
+    <!-- Container for buttons -->
+    <div class="button-container">
+        <!-- Green Button -->
+        <button class="button button-green" onclick="window.location.href='/upload';">Upload</button>
+
+        <!-- Blue Button -->
+        <button class="button button-blue" onclick="window.location.href='/userorder';">Orders</button>
+
+        <!-- Red Button -->
+        <button class="button button-red" onclick="window.location.href='/update';">Update</button>
+    </div>
+
+</body>
+</html>
