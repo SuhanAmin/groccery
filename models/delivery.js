@@ -1,7 +1,12 @@
 const mongoose=require('mongoose');
 const user = require('./user');
 require('dotenv').config();
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true,
+    serverSelectionTimeoutMS: 5000, // Fail fast if no connection
+})
 
 const deliverySchema=mongoose.Schema({
     userid:{
