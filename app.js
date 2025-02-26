@@ -44,18 +44,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.render('index');
 });
-app.get('/hy', async(req, res) => {
-      bcrypt.genSalt(10,(err,salt)=>{
-        bcrypt.hash("suhan1234",salt,async(err,hash)=>{
-            if(err) throw err;
-            password=hash;
-            let user=await adminmodel.create({
-                email,
-                password:hash
-            });
-        })
-      })
-});
+
 
 app.get('/usertrack/:id', async(req, res) => {
     id=req.params.id;
