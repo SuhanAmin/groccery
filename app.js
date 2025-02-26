@@ -45,7 +45,6 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-
 app.get('/usertrack/:id', async(req, res) => {
     id=req.params.id;
     const lastLocation = await usermodel.findOne({ _id: id });
@@ -99,10 +98,11 @@ app.get('/register', (req, res) => {
 });
 app.post('/register',async (req, res) => {
     let{email,password}=req.body;
+   
     let admin=await adminmodel.findOne({email:email});
     let d=await db.findOne({email:email});
     if(admin){
-    bcrypt.compare(password,"suhan1234",(err,result)=>{
+    bcrypt.compare(password,admin.password,(err,result)=>{
         if (result) {
             res.render('adminhome');
         }
@@ -218,6 +218,18 @@ app.get('/orders',islogedIn,async (req, res) => {
     res.render('orderpage',{user:user,user1:user.myorders});
   
   })
+  app.get('/hy', async(req, res) => {
+    bcrypt.genSalt(10,(err,salt)=>{
+      bcrypt.hash("suhan1234",salt,async(err,hash)=>{
+          if(err) throw err;
+          password=hash;
+          let user=await adminmodel.create({
+              email:"suhanamin",
+              password:hash
+          });
+      })
+    })
+});
 
   
 
