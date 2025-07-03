@@ -390,7 +390,7 @@
     <div class="container">
         <% post1.forEach((product) => { %>
         <div class="product-card">
-            <img src="./images/<%=product.filename%>" alt="Product 1" class="product-img">
+            <img src="<%=product.filename%>" alt="Product 1" class="product-img">
             <div class="product-details">
                 <h3 class="product-name"><%= product.title %></h3>
                 <p class="product-price">Rs.<%= product.price %></p>
