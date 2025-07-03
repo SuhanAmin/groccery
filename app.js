@@ -173,7 +173,7 @@ app.post('/submit',upload.single('filename'),async (req, res) => {
     let{title,price}=req.body;
     
     let post=await postmodel.create({
-        filename:req.file.filename,
+        filename:req.file.file.path,
         title,
         price
     });
