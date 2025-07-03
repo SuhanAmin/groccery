@@ -157,6 +157,7 @@ else{
 
 })
 
+
 app.get('/adminhome', (req, res) => {
     res.render('adminhome');
 });
@@ -218,18 +219,7 @@ app.get('/orders',islogedIn,async (req, res) => {
     res.render('orderpage',{user:user,user1:user.myorders});
   
   })
-  app.get('/hy', async(req, res) => {
-    bcrypt.genSalt(10,(err,salt)=>{
-      bcrypt.hash("suhan1234",salt,async(err,hash)=>{
-          if(err) throw err;
-          password=hash;
-          let user=await adminmodel.create({
-              email:"suhanamin",
-              password:hash
-          });
-      })
-    })
-});
+  
 
   
 
