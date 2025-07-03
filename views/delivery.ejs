@@ -168,7 +168,7 @@
                     <!-- Loop through orders of each user -->
                     <% product.orders.forEach((p) => { %>
                         <div class="product-details">
-                            <img src="./images/<%= p.pic %>" alt="Product" class="product-img">
+                            <img src="<%= p.pic %>" alt="Product" class="product-img">
                             <h3 class="product-name"><%= p.item %></h3>
                             <h3 class="product-name">Quantity: <%= p.quantity %></h3>
                             <p class="product-price">Price: <%= p.price %></p>
